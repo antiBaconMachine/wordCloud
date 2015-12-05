@@ -1,7 +1,11 @@
 <ul id="domCloud" class="col-md-9 col-xs-12">
     {{#each topics}}
-        <li class="weight_{{weight}}">
-            <a href="#">{{label}}</a>
-        </li>
+        {{> node}}
     {{/each}}
 </ul>
+
+{{#partial node}}
+<li class="weight_{{weight}} {{ vertical(label) }}" style="padding: {{ pad(label) }}px; vertical-align: {{verticalAlign(label)}}">
+    <a href="#">{{label}}</a>
+</li>
+{{/partial}}
