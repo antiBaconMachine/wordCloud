@@ -10,6 +10,6 @@ define(['Ractive', 'jquery', 'text!views/hello.html', 'json!res/topics.json'], f
         }
     });
 
-    
+
 
 });
