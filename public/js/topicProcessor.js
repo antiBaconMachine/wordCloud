@@ -12,21 +12,28 @@
 }(this, function (_) {
     "use strict";
 
+
+
     var self = Object.freeze({
         sort: function(topics, sort) {
             if (topics && topics.length) {
-                return topics.sort(sort || self.SORT_HILO);
+                return topics.sort(sort || self.SORT.HILO);
             }
             return topics;
         },
-        SORT_HILO: function(a, b) {
-            if (a.volume > b.volume) {
-                return -1;
-            } else if (a === b) {
-                return 0;
-            } else {
-                return 1;
+        SORT: {
+            HILO: function(a, b) {
+                if (a.volume > b.volume) {
+                    return -1;
+                } else if (a === b) {
+                    return 0;
+                } else {
+                    return 1;
+                }
             }
+        },
+        PROC: {
+
         }
     });
     return self;

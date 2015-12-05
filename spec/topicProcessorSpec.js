@@ -20,4 +20,28 @@ describe("topicProcessor", function () {
         //console.log(_.pluck(result, 'volume'));
     });
 
+    it("should apply processors to the topics in the given order", function () {
+
+        const sorted = fixture.sort(topics),
+            processed = sorted.map(_.compose.apply(_, [
+                function (topic) {
+                    topic.volume *= 2;
+                    return topic;
+                },
+                function (topic) {
+                    topic.volume += 2;
+                    return topic;
+                },
+                function (topic) {
+                    topic.volume *= 0.5;
+                    return topic;
+                },
+                function (topic) {
+                    topic.volume -= 1;
+                    return topic;
+                }
+            ]));
+        expect(processed).toEqual(sorted);
+
+    });
 });
