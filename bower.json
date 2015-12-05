@@ -1,0 +1,26 @@
+{
+  "name": "ExpressBootstrap",
+  "version": "0.0.0",
+  "authors": [
+    "Ollie Edwards <oliver.s.edwards+github@gmail.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ractive": "~0.7.3",
+    "requirejs": "~2.1.20",
+    "lodash": "~3.10.1",
+    "requirejs-plugins": "~1.0.3",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5"
+  }
+}
