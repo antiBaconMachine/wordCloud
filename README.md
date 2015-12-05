@@ -1,6 +1,6 @@
-# Express Bootstrap
+# Word Cloud
 
-General scaffold for a web app. Based on express generator with a few of my preferred packages sprinkled in.
+Word cloud demo app.
 
 ## Usage
 
