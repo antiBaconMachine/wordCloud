@@ -8,7 +8,8 @@ var requireConfig = {
         socketio: '../bower_components/socket.io-client/socket.io',
         jquery: '../bower_components/jquery/dist/jquery',
         //Cookies: '../bower_components/js-cookie/src/js.cookie',
-        views: '../views'
+        views: '../views',
+        res: '../res'
     }
 };
 
