@@ -3,5 +3,8 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.min.css')
   body
-    block content
+    block wrapper
+    script(src='/js/require.config.js')
+    script(src='/bower_components/requirejs/require.js', "data-main"='/js/bootstrap.js')
