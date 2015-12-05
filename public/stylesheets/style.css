@@ -6,3 +6,32 @@ body {
 a {
   color: #00B7FF;
 }
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  display: inline-block;
+  text-align: center;
+  padding: 3px;
+}
+
+.weight_6 {
+  font-size: xx-large;
+}
+.weight_5 {
+  font-size: x-large;
+}
+.weight_4 {
+  font-size: larger;
+}
+.weight_3 {
+  font-size: large;
+}
+.weight_2 {
+  font-size: medium;
+}
+.weight_1 {
+  font-size: small;
+}

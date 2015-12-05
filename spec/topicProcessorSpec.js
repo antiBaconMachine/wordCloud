@@ -30,7 +30,7 @@ describe("topicProcessor", function () {
         });
     });
 
-    it ("should weight topics in arbitrary divisions with leftovers in lowest", function() {
+    it("should weight topics in arbitrary divisions with leftovers in lowest", function () {
         const result = fixture.weight.bottomHeavy(3, SORTED),
             counts = _.countBy(result, 'weight');
         expect(counts['3']).toBe(1);
