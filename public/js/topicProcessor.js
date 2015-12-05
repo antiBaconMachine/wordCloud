@@ -12,29 +12,40 @@
 }(this, function (_) {
     "use strict";
 
-
-
-    var self = Object.freeze({
-        sort: function(topics, sort) {
-            if (topics && topics.length) {
-                return topics.sort(sort || self.SORT.HILO);
-            }
-            return topics;
-        },
-        SORT: {
-            HILO: function(a, b) {
-                if (a.volume > b.volume) {
-                    return -1;
-                } else if (a === b) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-        },
-        PROC: {
-
+    var hilo = function (a, b) {
+        if (a.volume > b.volume) {
+            return -1;
+        } else if (a === b) {
+            return 0;
+        } else {
+            return 1;
         }
-    });
-    return self;
+    };
+
+    var self = {
+        sort: {
+            hilo: hilo,
+            lohi: _.compose(
+                function (n) {
+                    return n * -1;
+                }, hilo)
+        },
+        weight: {
+            bottomHeavy: function (divisions, sorted) {
+                var total = sorted.length,
+                    dLen = Math.floor(Math.max(1, total / divisions));
+
+                var div = divisions + 1;
+                return sorted.map(function (topic, i) {
+                    if ((i % dLen) === 0) {
+                        div--;
+                    }
+                    topic.weight = Math.max(1, div);
+                    return topic;
+                });
+            }
+        }
+    };
+
+    return Object.freeze(self);
 }));
