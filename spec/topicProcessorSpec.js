@@ -50,15 +50,19 @@ describe("topicProcessor", function () {
         expect(counts['1']).toBe(3);
     });
 
-    it("should weight topics on a static curve with the top item having the largest weight", function() {
-        const result = fixture.weight.bottomHeavySquare(6, SORTED),
-            counts = _.countBy(result, 'weight');
-        expect(counts['6']).toBe(1);
-        expect(counts['5']).toBe(2);
-        expect(counts['4']).toBe(4);
-        expect(counts['3']).toBe(6);
-        expect(counts['2']).toBeUndefined();
-        expect(counts['1']).toBeUndefined();
+    it("should weight topics on an exponential curve with the top item having the largest weight", function() {
+        const divs = 6,
+            result = fixture.weight.bottomHeavyExp(divs, SORTED),
+            counts = _.countBy(result, 'weight'),
+            keyCounts = Object.keys(counts);
+
+        expect(keyCounts.length).toBe(divs);
+
+        let last = result[keyCounts.shift()];
+        keyCounts.forEach(function (key) {
+            expect(result[key] <= last).toBe(true);
+            last = result[key];
+        });
     });
 
     it("should assign a score based on arbitrary property and defined zones", function () {

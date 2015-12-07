@@ -44,19 +44,18 @@
                     return topic;
                 });
             },
-            bottomHeavySquare: function (divisions, sorted) {
-                var div = divisions,
-                    dlen = 1,
-                    j = 0;
+            bottomHeavyExp: function (divisions, sorted) {
+                var length = sorted.length,
+                    base = Math.pow(length, (1 / divisions)),
+                    div = divisions,
+                    rollover = base;
 
                 return sorted.map(function (topic, i) {
-                    if (j >= dlen) {
+                    if (i+1 >= rollover) {
                         div--;
-                        dlen *= 2;
-                        j=0;
+                        rollover = rollover * base;
                     }
                     topic.weight = Math.max(1, div);
-                    j++;
                     return topic;
                 });
             }
