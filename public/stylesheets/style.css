@@ -41,13 +41,13 @@ li {
 }
 
 .dodge .weight_6 a:after {
-  content: " wow";
+  content: ", wow";
 }
 .dodge .weight_5 a:before {
-  content: "very ";
+  content: "Very ";
 }
 .dodge .weight_4 a:before {
-  content: "such ";
+  content: "Such ";
 }
 
 .sentiment_negative {
