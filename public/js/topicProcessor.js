@@ -43,6 +43,22 @@
                     topic.weight = Math.max(1, div);
                     return topic;
                 });
+            },
+            bottomHeavySquare: function (divisions, sorted) {
+                var div = divisions,
+                    dlen = 1,
+                    j = 0;
+
+                return sorted.map(function (topic, i) {
+                    if (j >= dlen) {
+                        div--;
+                        dlen *= 2;
+                        j=0;
+                    }
+                    topic.weight = Math.max(1, div);
+                    j++;
+                    return topic;
+                });
             }
         },
         score: function(spec, topic) {
