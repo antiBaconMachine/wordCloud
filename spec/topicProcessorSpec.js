@@ -37,4 +37,18 @@ describe("topicProcessor", function () {
         expect(counts['2']).toBe(1);
         expect(counts['1']).toBe(2);
     });
+
+    it("should assign a score based on arbitrary property and defined zones", function () {
+
+        const result = [{sentimentScore: 39}, {sentimentScore: 40}, {sentimentScore: 60}, {sentimentScore: 61}].map(
+            _.partial(fixture.score, {
+                "property": "sentimentScore",
+                "output": "sentimentValue",
+                "zones": [40, 61],
+                "labels": ["negative", "neutral", "positive"]
+            })
+        );
+        expect(_.pluck(result, 'sentimentValue')).toEqual(['negative', 'neutral', 'neutral', 'positive']);
+
+    });
 });

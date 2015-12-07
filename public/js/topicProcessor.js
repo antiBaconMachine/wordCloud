@@ -44,6 +44,24 @@
                     return topic;
                 });
             }
+        },
+        score: function(spec, topic) {
+            var score = topic[spec.property],
+                last = -Infinity,
+                label = spec.labels[spec.labels.length - 1];
+
+            spec.zones.every(function(zone, i) {
+                if (score >= last && score < zone) {
+                    label = spec.labels[i];
+                    return false;
+                } else {
+                    last = zone;
+                    return true;
+                }
+            });
+
+            topic[spec.output] = label;
+            return topic;
         }
     };
 

@@ -1,0 +1,8 @@
+{
+  "score": {
+    "property": "sentimentScore",
+    "output": "sentimentValue",
+    "zones": [40, 61],
+    "labels": ["negative", "neutral", "positive"]
+  }
+}

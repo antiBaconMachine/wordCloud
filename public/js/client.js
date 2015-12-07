@@ -8,7 +8,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
         data: {
             topics: _.shuffle(proc.weight.bottomHeavy(6, json.topics.sort(proc.sort.hilo))),
             pad: _.compose(Math.floor, function(x) {
-                return x * 30
+                return x * 30;
             }, Math.random),
             verticalAlign: function() {
                 var rnd = Math.floor(Math.random() * 3);
