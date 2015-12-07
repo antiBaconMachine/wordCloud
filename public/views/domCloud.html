@@ -1,11 +1,7 @@
 <ul id="domCloud" class="col-md-9 col-xs-12">
     {{#each topics}}
-        {{> node}}
+    <li class="weight_{{weight}} {{ vertical(label) }}" style="padding: {{ pad(label) }}px; vertical-align: {{verticalAlign(label)}}">
+        <a class="sentiment_{{sentimentValue}}" href="#">{{label}}</a>
+    </li>
     {{/each}}
 </ul>
-
-{{#partial node}}
-<li class="weight_{{weight}} {{ vertical(label) }}" style="padding: {{ pad(label) }}px; vertical-align: {{verticalAlign(label)}}">
-    <a class="sentiment_{{sentimentValue}}" href="#">{{label}}</a>
-</li>
-{{/partial}}

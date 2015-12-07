@@ -1,4 +1,5 @@
-define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash', 'config'], function (Ractive, $, domCloudTemplate, json, proc, _, config) {
+define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash', 'config', 'text!views/layout.html', 'text!views/sideBar.html'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar) {
     "use strict";
 
     console.log(config);
@@ -6,7 +7,11 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
     Ractive.DEBUG = false;
     var domCloud = new Ractive({
         el: 'content',
-        template: domCloudTemplate,
+        template: tLayout,
+        partials: {
+            domCloud: tDomCloud,
+            sideBar: tSideBar
+        },
         data: {
             topics: _.shuffle(proc.weight.bottomHeavy(6, json.topics.sort(proc.sort.hilo)))
                 .map(_.partial(proc.score, {
@@ -31,6 +36,9 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             vertical: function () {
                 //return (Math.floor(Math.random() * 10) === 0) ? 'vertical' : '';
                 return '';
+            },
+            str: function(a) {
+                return JSON.stringify(a);
             }
         }
     });
