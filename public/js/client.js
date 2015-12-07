@@ -1,6 +1,6 @@
 define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash',
-    'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab) {
+    'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab', 'text!views/canvasCloud.html'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud) {
         "use strict";
 
         var CONST = Object.freeze({
@@ -17,7 +17,8 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             template: tLayout,
             partials: {
                 domCloud: tDomCloud,
-                sideBar: tSideBar
+                sideBar: tSideBar,
+                canvasCloud: tCanvasCloud
             },
             data: {
                 topics: buildTopics(),

@@ -1,0 +1,7 @@
+<svg id="canvasCloud" class="col-md-9 col-xs-12">
+    {{#each shuffle(topics)}}
+    <text class="weight_{{weight}} sentiment_{{sentimentValue}}" style="padding: {{ seed * 5 }}px; vertical-align: {{verticalAlign(label)}}">
+        {{label}}
+    </text>
+    {{/each}}
+</svg>
