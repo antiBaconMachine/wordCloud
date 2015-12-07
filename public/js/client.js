@@ -50,6 +50,10 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
+        ractive.on('dodgeChanged', function (event) {
+            $('body').toggleClass('dodge', event.node.checked);
+        });
+
         var lookup = function (id) {
             var indexed = _.indexBy(json.topics, 'id');
             lookup = function (id) {

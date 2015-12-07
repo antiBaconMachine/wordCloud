@@ -1,4 +1,4 @@
-<ul id="domCloud" class="col-md-9 col-xs-12">
+<ul id="domCloud" class="col-md-9 col-xs-12 wordCloud">
     {{#each topics}}
     <li class="weight_{{weight}} {{ vertical(label) }}" style="padding: {{ pad(label) }}px; vertical-align: {{verticalAlign(label)}}">
         <a class="sentiment_{{sentimentValue}}" href="#" on-click="selectTopic" data-topic="{{id}}">{{label}}</a>

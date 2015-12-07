@@ -1,10 +1,11 @@
 body {
   padding: 50px;
-  font: 14px "Comic Sans", Helvetica, Arial, sans-serif;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-body {
+.dodge .wordCloud {
   font-family: "Comic Sans MS", "Comic Sans", cursive;
+  background: url("../res/dodge.jpg");
 }
 
 a:hover {
