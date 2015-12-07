@@ -16,11 +16,14 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             },
             data: {
                 topics: _.shuffle(proc.weight.bottomHeavy(6, json.topics.sort(proc.sort.hilo)))
-                    .map(_.partial(proc.score, config.score)),
+                    .map(_.compose(
+                        function(topic) {
+                            topic.seed = Math.floor(Math.random() * 5);
+                            return topic;
+                        },
+                        _.partial(proc.score, config.score))
+                    ),
                 focussed: null,
-                pad: _.compose(Math.floor, function (x) {
-                    return x * 30;
-                }, Math.random),
                 verticalAlign: function () {
                     var rnd = Math.floor(Math.random() * 3);
                     if (rnd === 2) {
@@ -48,6 +51,10 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             if (topic) {
                 donut(topic);
             }
+        });
+
+        ractive.on('dodgeChanged', function (event) {
+            $('body').toggleClass('dodge', event.node.checked);
         });
 
         var lookup = function (id) {

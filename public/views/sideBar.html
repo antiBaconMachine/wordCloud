@@ -1,12 +1,18 @@
 <div id="sidebar" class="col-md-3 col-xs-12">
-    {{#focussed}}
-        <h3>{{label}}</h3>
-        <h4>Sentiment Breakdown</h4>
-    {{/focussed}}
-    {{^focussed}}
-        Select a tag.
-    {{/focussed}}
-    <div id="donut">
-
+    <div id="detail">
+        {{#focussed}}
+            <h3>{{label}}</h3>
+            <h4>Sentiment Breakdown</h4>
+        {{/focussed}}
+        {{^focussed}}
+            Select a tag.
+        {{/focussed}}
+        <div id="donut"/>
     </div>
+    <form id="settings">
+        <label for="dodgeMode">
+            Dodge mode
+        </label>
+        <input type="checkbox" on-click="dodgeChanged" id="dodgeMode">
+    </form>
 </div>

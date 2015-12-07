@@ -3,8 +3,13 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.dodge .wordCloud {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  background: url("../res/dodge.jpg");
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 ul {
@@ -33,6 +38,16 @@ li {
 }
 .weight_1 {
   font-size: 10px;
+}
+
+.dodge .weight_6 a:after {
+  content: ", wow";
+}
+.dodge .weight_5 a:before {
+  content: "Very ";
+}
+.dodge .weight_4 a:before {
+  content: "Such ";
 }
 
 .sentiment_negative {
