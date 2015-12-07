@@ -46,7 +46,6 @@
             }
         },
         score: function(spec, topic) {
-            console.log(spec);
             var score = topic[spec.property],
                 last = -Infinity,
                 label = spec.labels[spec.labels.length - 1];
