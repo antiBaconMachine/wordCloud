@@ -46,13 +46,25 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        ractive.on('selectTopic', function(event) {
-            var id = $(event.node).data('topic');
-            ractive.set('focussed', id);
-            donut(id);
+        ractive.on('selectTopic', function (event) {
+            var id = $(event.node).data('topic'),
+                topic = lookup(id);
+            ractive.set('focussed', topic);
+            if (topic) {
+                donut(id, topic);
+            }
         });
 
-        var donut = function(id) {
+        var lookup = function (id) {
+            var indexed = _.indexBy(json.topics, 'id');
+            console.log(indexed);
+            lookup = function (id) {
+                return indexed[id];
+            };
+            return lookup(id);
+        };
+
+        var donut = function (id, topic) {
             $('#' + CONST.donutId).html('');
             new d3pie("donut", {
                 "header": {
