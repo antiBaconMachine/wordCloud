@@ -24,9 +24,6 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                         _.partial(proc.score, config.score))
                     ),
                 focussed: null,
-                pad: function() {
-                    return this.seed*6;
-                },
                 verticalAlign: function () {
                     var rnd = Math.floor(Math.random() * 3);
                     if (rnd === 2) {
