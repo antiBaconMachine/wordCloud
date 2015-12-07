@@ -5,6 +5,10 @@
     "zones": [40, 61],
     "labels": ["negative", "neutral", "positive"]
   },
+  "weight": {
+    "divisions": 6,
+    "default": "exp"
+  },
   "colours": {
     "negative": "#FF0000",
     "neutral": "#808080",

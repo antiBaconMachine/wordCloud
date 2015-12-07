@@ -3,7 +3,11 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
         "use strict";
 
         var CONST = Object.freeze({
-            donutId: "donut"
+            donutId: "donut",
+            weights: {
+                exp: proc.weight.bottomHeavyExp,
+                eql: proc.weight.bottomHeavy
+            }
         });
 
         Ractive.DEBUG = false;
@@ -15,14 +19,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 sideBar: tSideBar
             },
             data: {
-                topics: _.shuffle(proc.weight.bottomHeavyExp(6, json.topics.sort(proc.sort.hilo)))
-                    .map(_.compose(
-                        function(topic) {
-                            topic.seed = Math.floor(Math.random() * 5);
-                            return topic;
-                        },
-                        _.partial(proc.score, config.score))
-                    ),
+                topics: buildTopics(),
                 focussed: null,
                 verticalAlign: function () {
                     var rnd = Math.floor(Math.random() * 3);
@@ -40,7 +37,8 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 },
                 str: function (a) {
                     return JSON.stringify(a);
-                }
+                },
+                shuffle: _.shuffle
             }
         });
 
@@ -57,6 +55,25 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             $('body').toggleClass('dodge', event.node.checked);
         });
 
+        ractive.on('weightChanged', function(event) {
+            var topics = ractive.get('topics'),
+                weight = CONST.weights[event.node.value];
+            if (weight) {
+                ractive.set('topics', weight(config.weight.divisions, topics));
+            }
+        });
+
+        function buildTopics() {
+            return (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
+                .map(_.compose(
+                    function(topic) {
+                        topic.seed = Math.floor(Math.random() * 5);
+                        return topic;
+                    },
+                    _.partial(proc.score, config.score))
+                );
+        };
+
         var lookup = function (id) {
             var indexed = _.indexBy(json.topics, 'id');
             lookup = function (id) {
@@ -72,7 +89,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                     "canvasHeight": 400,
                     "canvasWidth": 400,
                     "pieInnerRadius": "80%",
-                    "pieOuterRadius": "70%"
+                    "pieOuterRadius": "100%"
                 },
                 "data": {
                     "sortOrder": "label-desc",

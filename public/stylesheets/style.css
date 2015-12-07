@@ -22,13 +22,13 @@ li {
 }
 
 .weight_6 {
-  font-size: 96px;
+  font-size: 112px;
 }
 .weight_5 {
-  font-size: 74px;
+  font-size: 80px;
 }
 .weight_4 {
-  font-size: 54px;
+  font-size: 56px;
 }
 .weight_3 {
   font-size: 38px;
@@ -66,4 +66,8 @@ li {
   -ms-transform: rotate(-90deg);
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg);
+}
+
+.breathe {
+  margin-bottom: 10px;
 }
