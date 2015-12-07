@@ -15,7 +15,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 sideBar: tSideBar
             },
             data: {
-                topics: _.shuffle(proc.weight.bottomHeavy(6, json.topics.sort(proc.sort.hilo)))
+                topics: _.shuffle(proc.weight.bottomHeavySquare(6, json.topics.sort(proc.sort.hilo)))
                     .map(_.compose(
                         function(topic) {
                             topic.seed = Math.floor(Math.random() * 5);
