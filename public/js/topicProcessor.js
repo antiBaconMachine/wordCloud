@@ -13,13 +13,7 @@
     "use strict";
 
     var hilo = function (a, b) {
-        if (a.volume > b.volume) {
-            return -1;
-        } else if (a === b) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return b.volume - a.volume;
     };
 
     var self = {

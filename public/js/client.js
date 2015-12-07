@@ -72,7 +72,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                     },
                     _.partial(proc.score, config.score))
                 );
-        };
+        }
 
         var lookup = function (id) {
             var indexed = _.indexBy(json.topics, 'id');
