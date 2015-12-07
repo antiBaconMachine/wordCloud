@@ -7,8 +7,12 @@ var requireConfig = {
         jquery: '../bower_components/jquery/dist/jquery',
         d3: '../bower_components/d3/d3',
         d3pie: '../bower_components/d3pie/d3pie/d3pie',
+        tab: '../bower_components/bootstrap/js/tab',
         views: '../views',
         res: '../res'
+    },
+    shim : {
+        'tab': { deps: ['jquery'], exports: '$.fn.tab' }
     }
 };
 

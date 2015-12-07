@@ -1,4 +1,16 @@
 <div class="row">
-    {{>domCloud}}
-    {{>sideBar}}
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#domCloud" aria-controls="domCloud" role="tab" data-toggle="tab">DOM</a></li>
+        <li role="presentation"><a href="#canvasCloud" aria-controls="canvasCloud" role="tab" data-toggle="tab">Canvas (Beta)</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="domCloud">
+            {{>domCloud}}
+            {{>sideBar}}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="canvasCloud">Canvas</div>
+    </div>
+
 </div>
