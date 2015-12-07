@@ -4,5 +4,10 @@
     "output": "sentimentValue",
     "zones": [40, 61],
     "labels": ["negative", "neutral", "positive"]
+  },
+  "colours": {
+    "negative": "#FF0000",
+    "neutral": "#808080",
+    "positive": "#008000"
   }
 }

@@ -1,5 +1,5 @@
 define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash', 'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, d3pie) {
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie) {
         "use strict";
 
         var CONST = Object.freeze({
@@ -16,12 +16,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             },
             data: {
                 topics: _.shuffle(proc.weight.bottomHeavy(6, json.topics.sort(proc.sort.hilo)))
-                    .map(_.partial(proc.score, {
-                        "property": "sentimentScore",
-                        "output": "sentimentValue",
-                        "zones": [40, 61],
-                        "labels": ["negative", "neutral", "positive"]
-                    })),
+                    .map(_.partial(proc.score, config.score)),
                 focussed: null,
                 pad: _.compose(Math.floor, function (x) {
                     return x * 30;
@@ -51,163 +46,52 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 topic = lookup(id);
             ractive.set('focussed', topic);
             if (topic) {
-                donut(id, topic);
+                donut(topic);
             }
         });
 
         var lookup = function (id) {
             var indexed = _.indexBy(json.topics, 'id');
-            console.log(indexed);
             lookup = function (id) {
                 return indexed[id];
             };
             return lookup(id);
         };
 
-        var donut = function (id, topic) {
+        var donut = function (topic) {
             $('#' + CONST.donutId).html('');
-            new d3pie("donut", {
-                "header": {
-                    "title": {
-                        "text": "Top 15 Fears",
-                        "fontSize": 34,
-                        "font": "courier"
-                    },
-                    "subtitle": {
-                        "text": "What strikes the most terror in people?",
-                        "color": "#999999",
-                        "fontSize": 10,
-                        "font": "courier"
-                    },
-                    "location": "pie-center",
-                    "titleSubtitlePadding": 10
-                },
-                "footer": {
-                    "text": "* This was curious. We're not sure why over several people regard Winnipeg as a Top 15 Fear.",
-                    "color": "#999999",
-                    "fontSize": 10,
-                    "font": "open sans",
-                    "location": "bottom-left"
-                },
+            new D3pie("donut", {
                 "size": {
-                    "canvasHeight": 300,
-                    "canvasWidth": 300,
+                    "canvasHeight": 400,
+                    "canvasWidth": 400,
                     "pieInnerRadius": "80%",
                     "pieOuterRadius": "70%"
                 },
                 "data": {
                     "sortOrder": "label-desc",
-                    "content": [
-                        {
-                            "label": "Spiders",
-                            "value": 2,
-                            "color": "#333333"
-                        },
-                        {
-                            "label": "Mother-in-laws",
-                            "value": 10,
-                            "color": "#444444"
-                        },
-                        {
-                            "label": "Sharks",
-                            "value": 8,
-                            "color": "#555555"
-                        },
-                        {
-                            "label": "Alien invasion",
-                            "value": 8,
-                            "color": "#666666"
-                        },
-                        {
-                            "label": "Learning Objective-C",
-                            "value": 5,
-                            "color": "#777777"
-                        },
-                        {
-                            "label": "Public speaking",
-                            "value": 3,
-                            "color": "#888888"
-                        },
-                        {
-                            "label": "Donald Rumsfeld",
-                            "value": 4,
-                            "color": "#999999"
-                        },
-                        {
-                            "label": "The Zombie Apocalypse",
-                            "value": 4,
-                            "color": "#cb2121"
-                        },
-                        {
-                            "label": "The City of Winnipeg *",
-                            "value": 3,
-                            "color": "#830909"
-                        },
-                        {
-                            "label": "IE 6",
-                            "value": 2,
-                            "color": "#923e99"
-                        },
-                        {
-                            "label": "Planes with/out snakes",
-                            "value": 5,
-                            "color": "#ae83d5"
-                        },
-                        {
-                            "label": "Off-by-one errors",
-                            "value": 3,
-                            "color": "#111111"
-                        },
-                        {
-                            "label": "Chickadees",
-                            "value": 4,
-                            "color": "#050505"
-                        },
-                        {
-                            "label": "A never-ending Harper Government",
-                            "value": 1,
-                            "color": "#646464"
-                        },
-                        {
-                            "label": "Canada",
-                            "value": 4,
-                            "color": "#747474"
-                        }
-                    ]
+                    "content": _.reduce(topic.sentiment, function (acc, v, k) {
+                        acc.push({
+                            "label": k,
+                            "value": v,
+                            "color": config.colours[k]
+                        });
+                        return acc;
+                    }, [])
                 },
                 "labels": {
                     "outer": {
-                        "format": "label-percentage1",
-                        "pieDistance": 20
+                        "format": "none",
+                        "pieDistance": 10
                     },
                     "inner": {
-                        "format": "none"
+                        "format": "value"
                     },
                     "mainLabel": {
                         "fontSize": 11
                     },
-                    "percentage": {
-                        "color": "#999999",
-                        "fontSize": 11,
-                        "decimalPlaces": 0
-                    },
                     "value": {
-                        "color": "#cccc43",
+                        "color": "#000000",
                         "fontSize": 11
-                    },
-                    "lines": {
-                        "enabled": true,
-                        "color": "#777777"
-                    },
-                    "truncation": {
-                        "enabled": true
-                    }
-                },
-                "effects": {
-                    "pullOutSegmentOnClick": {
-                        "effect": "linear",
-                        "speed": 400,
-                        "size": 8
                     }
                 },
                 "misc": {
@@ -216,6 +100,6 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                     }
                 }
             });
-        }
+        };
 
     });
