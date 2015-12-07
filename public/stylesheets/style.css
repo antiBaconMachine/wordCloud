@@ -36,6 +36,16 @@ li {
   font-size: 6px;
 }
 
+.sentiment_negative {
+  color: red;
+}
+.sentiment_neutral {
+  color: gray;
+}
+.sentiment_positive {
+  color: green;
+}
+
 .vertical {
   -webkit-transform: rotate(-90deg);
   -moz-transform: rotate(-90deg);

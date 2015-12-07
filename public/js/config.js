@@ -1,4 +1,4 @@
-define(['text!config.json'], function(strJson) {
+define(['text!config.json'], function(json) {
    "use strict";
-    return Object.freeze(JSON.parse);
+    return Object.freeze(json);
 });
