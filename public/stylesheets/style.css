@@ -52,12 +52,16 @@ li {
 
 .sentiment_negative {
   color: red;
+  fill: red;
+
 }
 .sentiment_neutral {
   color: gray;
+  fill: gray;
 }
 .sentiment_positive {
   color: green;
+  fill: green;
 }
 
 .vertical {
@@ -70,4 +74,32 @@ li {
 
 .breathe {
   margin-bottom: 10px;
+}
+
+text {
+  border: 1px solid black;
+}
+
+.tab-content > .tab-pane {
+  display: inherit;
+  visibility: hidden;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+
+}
+.tab-content > .active {
+  display: inherit;
+  visibility: visible;
+  position: relative;
+  top: inherit;
+  left: inherit;
+}
+
+.spiral {
+  min-height: 800px;
+}
+
+.spiral li {
+  position: absolute;
 }

@@ -13,5 +13,13 @@
     "negative": "#FF0000",
     "neutral": "#808080",
     "positive": "#008000"
+  },
+  "donut": {
+    "id": "donut"
+  },
+  "spiral": {
+    "size": 600,
+    "fontModifier": 10,
+    "pad": 0
   }
 }

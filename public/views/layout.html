@@ -1,4 +1,18 @@
+
 <div class="row">
-    {{>domCloud}}
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#domCloud" aria-controls="domCloud" role="tab" data-toggle="tab">DOM</a></li>
+        <li role="presentation" class=""><a href="#spiralCloud" aria-controls="spiralCloud" role="tab" data-toggle="tab" on-click="renderSpiral">Spiral (Beta)</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="domCloud">
+            {{>domCloud}}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="spiralCloud">
+            {{>spiralCloud}}
+        </div>
+    </div>
     {{>sideBar}}
 </div>

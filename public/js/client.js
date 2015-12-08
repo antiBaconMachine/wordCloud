@@ -1,14 +1,33 @@
-define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash', 'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie) {
+define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash',
+        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'donut', 'tab', 'text!views/spiralCloud.html', 'spiral'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, donut, tab, tSprialCloud, spiral) {
         "use strict";
 
         var CONST = Object.freeze({
-            donutId: "donut",
             weights: {
                 exp: proc.weight.bottomHeavyExp,
                 eql: proc.weight.bottomHeavy
             }
         });
+
+        var topics = _.shuffle((CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
+            .map(_.compose(
+                function (topic) {
+                    topic.seed = Math.floor(Math.random() * 5);
+                    topic.s_top = -1000;
+                    topic.s_left = -1000;
+                    return topic;
+                },
+                _.partial(proc.score, config.score))
+            ));
+
+        var lookup = function (id) {
+            var indexed = _.indexBy(topics, 'id');
+            lookup = function (id) {
+                return indexed[id];
+            };
+            return lookup(id);
+        };
 
         Ractive.DEBUG = false;
         var ractive = new Ractive({
@@ -16,10 +35,11 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             template: tLayout,
             partials: {
                 domCloud: tDomCloud,
+                spiralCloud: tSprialCloud,
                 sideBar: tSideBar
             },
             data: {
-                topics: buildTopics(),
+                topics: topics,
                 focussed: null,
                 verticalAlign: function () {
                     var rnd = Math.floor(Math.random() * 3);
@@ -31,20 +51,17 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                         return "bottom";
                     }
                 },
-                vertical: function () {
-                    //return (Math.floor(Math.random() * 10) === 0) ? 'vertical' : '';
-                    return '';
-                },
                 str: function (a) {
                     return JSON.stringify(a);
-                },
-                shuffle: _.shuffle
+                }
             }
         });
 
         ractive.on('selectTopic', function (event) {
-            var id = $(event.node).data('topic'),
+            var $node = $(event.node),
+                id = $node.data('topic'),
                 topic = lookup(id);
+
             ractive.set('focussed', topic);
             if (topic) {
                 donut(topic);
@@ -55,7 +72,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             $('body').toggleClass('dodge', event.node.checked);
         });
 
-        ractive.on('weightChanged', function(event) {
+        ractive.on('weightChanged', function (event) {
             var topics = ractive.get('topics'),
                 weight = CONST.weights[event.node.value];
             if (weight) {
@@ -63,67 +80,10 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        function buildTopics() {
-            return (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
-                .map(_.compose(
-                    function(topic) {
-                        topic.seed = Math.floor(Math.random() * 5);
-                        return topic;
-                    },
-                    _.partial(proc.score, config.score))
-                );
-        }
-
-        var lookup = function (id) {
-            var indexed = _.indexBy(json.topics, 'id');
-            lookup = function (id) {
-                return indexed[id];
-            };
-            return lookup(id);
-        };
-
-        var donut = function (topic) {
-            $('#' + CONST.donutId).html('');
-            new D3pie("donut", {
-                "size": {
-                    "canvasHeight": 400,
-                    "canvasWidth": 400,
-                    "pieInnerRadius": "80%",
-                    "pieOuterRadius": "100%"
-                },
-                "data": {
-                    "sortOrder": "label-desc",
-                    "content": _.reduce(topic.sentiment, function (acc, v, k) {
-                        acc.push({
-                            "label": k,
-                            "value": v,
-                            "color": config.colours[k]
-                        });
-                        return acc;
-                    }, [])
-                },
-                "labels": {
-                    "outer": {
-                        "format": "none",
-                        "pieDistance": 10
-                    },
-                    "inner": {
-                        "format": "value"
-                    },
-                    "mainLabel": {
-                        "fontSize": 11
-                    },
-                    "value": {
-                        "color": "#000000",
-                        "fontSize": 11
-                    }
-                },
-                "misc": {
-                    "colors": {
-                        "segmentStroke": "#000000"
-                    }
-                }
+        ractive.on('complete', function () {
+            _.defer(function () {
+                ractive.set('topics', spiral(lookup));
             });
-        };
+        });
 
     });
