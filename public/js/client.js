@@ -162,6 +162,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                                 return spiral(j);
                             }
                         }()),
+                        pad = 2,
                         point,
                         rect;
 
@@ -175,8 +176,12 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                             y: y
                         };
 
-                        rect = _.extend(bbox, point);
-                        console.log(rect);
+                        rect = {
+                            x: x-pad,
+                            y: y-pad,
+                            width: bbox.width+pad,
+                            height: bbox.height+pad
+                        };
                         var collisions = quad.colliding(rect);
                         console.log(collisions);
                         if (!collisions || !collisions.length) {
@@ -184,10 +189,9 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                         }
 
                         //TODO better failsafe condition, maxDelta?
-                    } while (i++ < 50000);
-                    //class: "weight_" + d.weight + " sentiment_" + d.sentimentValue
+                    } while (i++ < 500);
                     d3.select(this).attr(_.extend(point, {
-
+                        class: " sentiment_" + d.sentimentValue
                     }));
                     quad.push(rect);
                 })
