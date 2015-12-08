@@ -3,8 +3,6 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
     function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud, quadtree) {
         "use strict";
 
-        window.quadtree = quadtree;
-
         var CONST = Object.freeze({
             donutId: "donut",
             weights: {
@@ -152,54 +150,58 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 .text(function (d) {
                     return d.label;
                 })
-                .each(function (d) {
-                    var i = 0,
-                        bbox = this.getBBox(),
-                        next = (function () {
-                            var j = 0;
-                            return function () {
-                                j = j + 50;
-                                return spiral(j);
-                            }
-                        }()),
-                        pad = 2,
-                        point,
-                        rect;
-
-                    do {
-                        var xy = next(),
-                            x = xy[0] + center,
-                            y = xy[1] + center;
-
-                        point = {
-                            x: x,
-                            y: y
-                        };
-
-                        rect = {
-                            x: x-pad,
-                            y: y-pad,
-                            width: bbox.width+pad,
-                            height: bbox.height+pad
-                        };
-                        var collisions = quad.colliding(rect);
-                        console.log(collisions);
-                        if (!collisions || !collisions.length) {
-                            break;
-                        }
-
-                        //TODO better failsafe condition, maxDelta?
-                    } while (i++ < 500);
-                    d3.select(this).attr(_.extend(point, {
-                        class: " sentiment_" + d.sentimentValue
-                    }));
-                    quad.push(rect);
+                .attr('font-size', function (d) {
+                    return (d.weight * 10) + 'px';
                 })
                 .style('dominant-baseline', 'central')
                 .attr("text-anchor", "middle");
 
+            nodes.each(function (d) {
+                var i = 0,
+                    bbox = this.getBBox(),
+                    next = (function () {
+                        var j = 0;
+                        return function () {
+                            j = j + 50;
+                            return spiral(j);
+                        }
+                    }()),
+                    pad = 2,
+                    point,
+                    rect;
 
-            window.nodes = nodes;
+                do {
+                    var xy = next(),
+                        x = xy[0] + center,
+                        y = xy[1] + center;
+
+                    point = {
+                        x: x,
+                        y: y
+                    };
+
+                    rect = {
+                        x: x - pad,
+                        y: y - pad,
+                        width: bbox.width + pad,
+                        height: bbox.height + pad
+                    };
+                    var collisions = quad.colliding(rect);
+                    console.log(collisions);
+                    if (!collisions || !collisions.length) {
+                        break;
+                    }
+
+                    //TODO better failsafe condition, maxDelta?
+                } while (i++ < 500);
+                d3.select(this).attr(_.extend(point, {
+                    class: " sentiment_" + d.sentimentValue
+                }));
+                quad.push(rect);
+            });
+
+
+            //window.nodes = nodes;
         };
 
         function archimedeanSpiral(size) {
