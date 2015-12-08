@@ -11,7 +11,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        var topics = (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
+        var topics = _.shuffle((CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
             .map(_.compose(
                 function (topic) {
                     topic.seed = Math.floor(Math.random() * 5);
@@ -20,7 +20,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                     return topic;
                 },
                 _.partial(proc.score, config.score))
-            );
+            ));
 
         var lookup = function (id) {
             var indexed = _.indexBy(topics, 'id');
@@ -54,14 +54,15 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 },
                 str: function (a) {
                     return JSON.stringify(a);
-                },
-                shuffle: _.shuffle
+                }
             }
         });
 
         ractive.on('selectTopic', function (event) {
-            var id = $(event.node).data('topic'),
+            var $node = $(event.node),
+                id = $node.data('topic'),
                 topic = lookup(id);
+
             ractive.set('focussed', topic);
             if (topic) {
                 donut(topic);
