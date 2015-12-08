@@ -8,13 +8,13 @@ define(['jquery', 'lodash', 'quadtree', 'config'], function($, _, Quadtree, conf
     return function (lookup) {
         console.log("laying out spiral");
 
-        var spiralSize = 800,
+        var spiralSize = config.spiral.size,
             center = (spiralSize / 2),
             quad = new Quadtree({
                 width: spiralSize,
                 height: spiralSize
             }),
-            pad = 0,
+            pad = config.spiral.pad,
             topics = [];
 
 
@@ -26,7 +26,7 @@ define(['jquery', 'lodash', 'quadtree', 'config'], function($, _, Quadtree, conf
                 next = (function () {
                     var j = 0;
                     return function () {
-                        j = j + (Math.random() * 50);
+                        j = j + (Math.random() * 30);
                         return spiral(j);
                     };
                 }()),
@@ -44,8 +44,8 @@ define(['jquery', 'lodash', 'quadtree', 'config'], function($, _, Quadtree, conf
                 };
 
                 rect = {
-                    x: x - pad,
-                    y: y - pad,
+                    x: Math.max(0, x - pad),
+                    y: Math.max(0, y - pad),
                     width: $node.width() + pad,
                     height: $node.height() + pad
                 };

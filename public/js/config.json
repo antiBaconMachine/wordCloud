@@ -16,5 +16,10 @@
   },
   "donut": {
     "id": "donut"
+  },
+  "spiral": {
+    "size": 600,
+    "fontModifier": 10,
+    "pad": 0
   }
 }
