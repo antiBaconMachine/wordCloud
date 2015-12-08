@@ -1,10 +1,9 @@
 define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash',
-        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab', 'text!views/canvasCloud.html', 'spiral'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud, spiral) {
+        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'donut', 'tab', 'text!views/canvasCloud.html', 'spiral'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, donut, tab, tCanvasCloud, spiral) {
         "use strict";
 
         var CONST = Object.freeze({
-            donutId: "donut",
             weights: {
                 exp: proc.weight.bottomHeavyExp,
                 eql: proc.weight.bottomHeavy
@@ -81,53 +80,10 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        ractive.on('complete', function() {
-            _.defer(function() {
+        ractive.on('complete', function () {
+            _.defer(function () {
                 ractive.set('topics', spiral(lookup));
             });
         });
 
-        var donut = function (topic) {
-            $('#' + CONST.donutId).html('');
-            new D3pie("donut", {
-                "size": {
-                    "canvasHeight": 400,
-                    "canvasWidth": 400,
-                    "pieInnerRadius": "80%",
-                    "pieOuterRadius": "100%"
-                },
-                "data": {
-                    "sortOrder": "label-desc",
-                    "content": _.reduce(topic.sentiment, function (acc, v, k) {
-                        acc.push({
-                            "label": k,
-                            "value": v,
-                            "color": config.colours[k]
-                        });
-                        return acc;
-                    }, [])
-                },
-                "labels": {
-                    "outer": {
-                        "format": "none",
-                        "pieDistance": 10
-                    },
-                    "inner": {
-                        "format": "value"
-                    },
-                    "mainLabel": {
-                        "fontSize": 11
-                    },
-                    "value": {
-                        "color": "#000000",
-                        "fontSize": 11
-                    }
-                },
-                "misc": {
-                    "colors": {
-                        "segmentStroke": "#000000"
-                    }
-                }
-            });
-        };
     });
