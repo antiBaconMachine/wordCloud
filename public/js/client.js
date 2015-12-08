@@ -1,7 +1,9 @@
 define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash',
-    'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab', 'text!views/canvasCloud.html'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud) {
+        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab', 'text!views/canvasCloud.html', 'quadtree'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud, quadtree) {
         "use strict";
+
+        window.quadtree = quadtree;
 
         var CONST = Object.freeze({
             donutId: "donut",
@@ -57,7 +59,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             $('body').toggleClass('dodge', event.node.checked);
         });
 
-        ractive.on('weightChanged', function(event) {
+        ractive.on('weightChanged', function (event) {
             var topics = ractive.get('topics'),
                 weight = CONST.weights[event.node.value];
             if (weight) {
@@ -70,7 +72,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
         function buildTopics() {
             return (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
                 .map(_.compose(
-                    function(topic) {
+                    function (topic) {
                         topic.seed = Math.floor(Math.random() * 5);
                         return topic;
                     },
@@ -130,20 +132,16 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             });
         };
 
-        var d3Cloud = function(spiralSize) {
+        var d3Cloud = function (spiralSize) {
             var spiral = archimedeanSpiral([spiralSize, spiralSize]),
-                next = (function(){
-                    var i = 0;
-                    return function() {
-                        i = i + 50;
-                        return spiral(i);
-                    }
-                }()),
                 center = spiralSize / 2;
-                window.spiral = spiral;
+            window.spiral = spiral;
 
-
-            var quad = new d3.geom.quadtree([]);
+            var quad = new Quadtree({
+                    width: spiralSize,
+                    height: spiralSize
+                }),
+                pad = 2;
 
             var nodes = d3.select('#svgCloud')
                 .attr('width', spiralSize)
@@ -151,27 +149,50 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 .selectAll('text')
                 .data(_.shuffle(buildTopics()))
                 .enter().append('text')
-                .text(function(d) {
+                .text(function (d) {
                     return d.label;
                 })
-                .each(function(d) {
-                    var xy = next();
+                .each(function (d) {
+                    var i = 0,
+                        bbox = this.getBBox(),
+                        next = (function () {
+                            var j = 0;
+                            return function () {
+                                j = j + 50;
+                                return spiral(j);
+                            }
+                        }()),
+                        point,
+                        rect;
 
-                    //var rect = {
-                    //    x: xy[0],
-                    //    y: xy[1],
-                    //    height: d.height,
-                    //    width: d.width
-                    //};
-                    //console.dir(rect);
+                    do {
+                        var xy = next(),
+                            x = xy[0] + center,
+                            y = xy[1] + center;
 
-                    d3.select(this).attr({
-                        class: "weight_" + d.weight + " sentiment_" + d.sentimentValue,
-                        x: center + xy[0],
-                        y: center + xy[1]
-                    })
+                        point = {
+                            x: x,
+                            y: y
+                        };
+
+                        rect = _.extend(bbox, point);
+                        console.log(rect);
+                        var collisions = quad.colliding(rect);
+                        console.log(collisions);
+                        if (!collisions || !collisions.length) {
+                            break;
+                        }
+
+                        //TODO better failsafe condition, maxDelta?
+                    } while (i++ < 50000);
+                    //class: "weight_" + d.weight + " sentiment_" + d.sentimentValue
+                    d3.select(this).attr(_.extend(point, {
+
+                    }));
+                    quad.push(rect);
                 })
-                .style('dominant-baseline', 'central');
+                .style('dominant-baseline', 'central')
+                .attr("text-anchor", "middle");
 
 
             window.nodes = nodes;
@@ -179,11 +200,11 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
 
         function archimedeanSpiral(size) {
             var e = size[0] / size[1];
-            return function(t) {
+            return function (t) {
                 return [e * (t *= .1) * Math.cos(t), t * Math.sin(t)];
             };
         }
 
-        d3Cloud(800);
+        _.defer(_.partial(d3Cloud, 800));
 
     });

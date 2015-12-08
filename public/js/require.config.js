@@ -8,11 +8,13 @@ var requireConfig = {
         d3: '../bower_components/d3/d3',
         d3pie: '../bower_components/d3pie/d3pie/d3pie',
         tab: '../bower_components/bootstrap/js/tab',
+        quadtree: '../bower_components/quadtree-lib/build/js/quadtree',
         views: '../views',
         res: '../res'
     },
     shim : {
-        'tab': { deps: ['jquery'], exports: '$.fn.tab' }
+        'tab': { deps: ['jquery'], exports: '$.fn.tab' },
+        'quadtree': {exports: 'Quadtree'}
     }
 };
 
