@@ -58,10 +58,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
         });
 
         ractive.on('selectTopic', function (event) {
-            var $node = $(event.node),
-                id = $node.data('topic'),
-                topic = lookup(id);
-
+            var topic = lookup($(event.node).data('topic'));
             ractive.set('focussed', topic);
             if (topic) {
                 donut(topic);
