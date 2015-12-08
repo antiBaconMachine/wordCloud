@@ -14,7 +14,7 @@ define(['jquery', 'lodash', 'quadtree', 'config'], function($, _, Quadtree, conf
                 width: spiralSize,
                 height: spiralSize
             }),
-            pad = 5,
+            pad = 0,
             topics = [];
 
 

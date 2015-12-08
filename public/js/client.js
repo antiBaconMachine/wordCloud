@@ -52,10 +52,6 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                         return "bottom";
                     }
                 },
-                vertical: function () {
-                    //return (Math.floor(Math.random() * 10) === 0) ? 'vertical' : '';
-                    return '';
-                },
                 str: function (a) {
                     return JSON.stringify(a);
                 },
