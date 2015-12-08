@@ -4,9 +4,10 @@
             <h3>{{label}}</h3>
             <h4>Sentiment Breakdown</h4>
             <div id="donut"/>
-            <p>
-                Score: {{sentimentScore}} ({{sentimentValue}})
-            </p>
+            <ul>
+                <li>Total mentions: {{volume}}</li>
+                <li>Sentiment Score: {{sentimentScore}} ({{sentimentValue}})</li>
+            </ul>
         {{/focussed}}
     </div>
 </div>

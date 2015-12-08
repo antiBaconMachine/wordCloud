@@ -14,9 +14,11 @@ a:hover {
 
 ul {
   list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-li {
+.wordCloud li {
   display: inline-block;
   text-align: center;
 }
