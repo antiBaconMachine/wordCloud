@@ -48,7 +48,7 @@ by default as we can rely on the browser to reflow the page for us.
 
 ### Spiral (beta)
 
-This uses absolute positioning to lay out DOM elements along an Archimedian spiral. A quadtree is used to detect
+This uses absolute positioning to lay out elements along an Archimedian spiral. A quadtree is used to detect
 collisions and nudge the elements around until a good fit is found.
 
 The result is a much more pleasing cloud like layout, but we loose all assistance that the browser normally provides for
@@ -61,7 +61,7 @@ Donut breakdown charts are shown when a topic is clicked, courtesy of d3pie.
 
 ## Missing stuff
 
-Obviously the app isn't perfect, there a a few things I haven't got around to:
+Obviously the app isn't perfect, there are a few things I haven't got around to:
 
 * RequireJS Optimisation - I felt like my time was better spent elsewhere, suffice to say if this app was going to
 production I would minify, and possibly offload some deps to a CDN
