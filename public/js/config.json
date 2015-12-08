@@ -15,7 +15,8 @@
     "positive": "#008000"
   },
   "donut": {
-    "id": "donut"
+    "id": "donut",
+    "size": 300
   },
   "spiral": {
     "size": 600,

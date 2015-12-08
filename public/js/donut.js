@@ -7,8 +7,8 @@ define(['jquery', 'lodash', 'config', 'd3', 'd3pie'], function ($, _, config, d3
         $('#' + donutId).html('');
         new D3pie("donut", {
             "size": {
-                "canvasHeight": 400,
-                "canvasWidth": 400,
+                "canvasHeight": config.donut.size,
+                "canvasWidth": config.donut.size,
                 "pieInnerRadius": "80%",
                 "pieOuterRadius": "100%"
             },
