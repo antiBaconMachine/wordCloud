@@ -12,8 +12,9 @@ Word cloud demo app.
 
 ## Back end
 
-The app is obviously served by express. The views are largely offloaded to the front end but there are simple jade
-templates for the basic html scaffold.
+The app is served by express. The views are largely offloaded to the front end but there are simple jade
+templates for the basic html scaffold. This app as specified doesn't strictly need a server but I like to have it anyway as
+it can make debugging easier and it's more future proof if the scope of the project grows.
 
 The back end is designed to run in node 4.2.1 and therefore uses plenty of ecma6 idioms.
 
@@ -28,3 +29,26 @@ Front end dependencies are managed by bower. This does create some duplication w
 [yet](http://blog.npmjs.org/post/101775448305/npm-and-front-end-packaging) provide a clean standard way to share
 dependencies between front and back ends. The bower registry is also a bit more complete when it comes to things we want
 for the front end. I currently consider bower to be the best tool for the job so I put up with the duplication.
+
+## Word cloud implementations
+
+I've provided two implementations of the cloud:
+
+### DOM
+
+This models the tags as inline blocks with random baseline alignments to create a reasonably haphazard arrangement. The
+lines are still clearly visible however so it's not very cloudlike. It is nice and simple to implement and it's responsive
+by default as we can rely on the browser to reflow the page for us.
+
+### Spiral (beta)
+
+This uses absolute positioning to lay out DOM elements along an Archimedian spiral. A quadtree is used to detect
+collisions and nudge the elements around until a good fit is found.
+
+The result is a much more pleasing cloud like layout, but we loose all assistance that the browser normally provides for
+layouts. I've marked this design as beta as I have not yet implemented redraws on screen resize and it has not had as much
+general testing and tinkering as the other layout.
+
+## Donut charts
+
+Donut breakdown charts are shown when a topic is clicked, courtesy of d3pie.
