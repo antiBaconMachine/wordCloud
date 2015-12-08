@@ -80,10 +80,24 @@ text {
   border: 1px solid black;
 }
 
-.spiral {
+.tab-content > .tab-pane {
+  display: inherit;
+  visibility: hidden;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+
+}
+.tab-content > .active {
+  display: inherit;
+  visibility: visible;
   position: relative;
-  width: 800px;
-  height: 800px;
+  top: inherit;
+  left: inherit;
+}
+
+.spiral {
+  min-height: 800px;
 }
 
 .spiral li {

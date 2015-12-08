@@ -84,8 +84,10 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        ractive.on('renderSpiral', function() {
-            ractive.set('topics', spiral(lookup));
+        ractive.on('complete', function() {
+            _.defer(function() {
+                ractive.set('topics', spiral(lookup));
+            });
         });
 
         var donut = function (topic) {

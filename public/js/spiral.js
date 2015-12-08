@@ -6,7 +6,6 @@ define(['jquery', 'lodash', 'quadtree', 'config'], function($, _, Quadtree, conf
     }
 
     return function (lookup) {
-
         console.log("laying out spiral");
 
         var spiralSize = 800,
