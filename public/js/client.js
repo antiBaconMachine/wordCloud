@@ -143,27 +143,38 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 window.spiral = spiral;
 
 
-            d3.select('#svgCloud')
+            var quad = new d3.geom.quadtree([]);
+
+            var nodes = d3.select('#svgCloud')
                 .attr('width', spiralSize)
                 .attr('height', spiralSize)
                 .selectAll('text')
                 .data(_.shuffle(buildTopics()))
                 .enter().append('text')
-                .attr('class', function(d) {
-                    return "weight_" + d.weight + " sentiment_" + d.sentimentValue;
-                })
                 .text(function(d) {
                     return d.label;
                 })
-                .attr('x', function(d) {
+                .each(function(d) {
                     var xy = next();
-                    d.cy = center + xy[1];
-                    return center + xy[0];
+
+                    //var rect = {
+                    //    x: xy[0],
+                    //    y: xy[1],
+                    //    height: d.height,
+                    //    width: d.width
+                    //};
+                    //console.dir(rect);
+
+                    d3.select(this).attr({
+                        class: "weight_" + d.weight + " sentiment_" + d.sentimentValue,
+                        x: center + xy[0],
+                        y: center + xy[1]
+                    })
                 })
-                .attr('y', function(d) {
-                    return d.cy;
-                })
-                .attr('style', 'dominant-baseline: central;')
+                .style('dominant-baseline', 'central');
+
+
+            window.nodes = nodes;
         };
 
         function archimedeanSpiral(size) {
