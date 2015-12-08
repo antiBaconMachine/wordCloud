@@ -2,7 +2,7 @@
     <div class="spiral wordCloud">
         {{#each shuffle(topics)}}
         <li class="weight_{{weight}}" style="top: {{s_top}}px; left: {{s_left}}px">
-            <a class="sentiment_{{sentimentValue}} random_{{seed}}" href="#" on-click="selectTopic" data-topic="{{id}}">{{label}}</a>
+            <a class="spiralNode sentiment_{{sentimentValue}} random_{{seed}}" href="#" on-click="selectTopic" data-topic="{{id}}">{{label}}</a>
         </li>
         {{/each}}
     </div>

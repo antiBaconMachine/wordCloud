@@ -11,6 +11,17 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
+        var topics = (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
+            .map(_.compose(
+                function (topic) {
+                    topic.seed = Math.floor(Math.random() * 5);
+                    topic.s_top = -1000;
+                    topic.s_left = -1000;
+                    return topic;
+                },
+                _.partial(proc.score, config.score))
+            );
+
         Ractive.DEBUG = false;
         var ractive = new Ractive({
             el: 'content',
@@ -21,7 +32,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 canvasCloud: tCanvasCloud
             },
             data: {
-                topics: buildTopics(),
+                topics: topics,
                 focussed: null,
                 verticalAlign: function () {
                     var rnd = Math.floor(Math.random() * 3);
@@ -65,72 +76,73 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        ractive.on('render', function() {
-                var spiralSize = 800,
-                    center = spiralSize / 2,
-                    quad = new Quadtree({
-                        width: spiralSize,
-                        height: spiralSize
-                    }),
-                    pad = 2;
+        ractive.on('complete', function () {
 
-                return function () {
+            console.log("laying out spiral");
 
-                    var i = 0,
-                        next = (function () {
-                            var j = 0;
-                            return function () {
-                                j = j + (Math.random() * 50);
-                                return spiral(j);
-                            }
-                        }()),
-                        point,
-                        rect;
+            var spiralSize = 800,
+                center = spiralSize / 2,
+                quad = new Quadtree({
+                    width: spiralSize,
+                    height: spiralSize
+                }),
+                pad = 2,
+                topics = [];
 
-                    do {
-                        var xy = next(),
-                            x = xy[0] + center,
-                            y = xy[1] + center;
 
-                        point = {
-                            x: x,
-                            y: y
-                        };
+            $('.spiralNode').each(function (index, node) {
+                console.log(arguments);
 
-                        rect = {
-                            x: x - pad,
-                            y: y - pad,
-                            width: bbox.width + pad,
-                            height: bbox.height + pad + ((d.weight) * 5)
-                        };
-                        var collisions = quad.colliding(rect);
-                        console.log(collisions);
-                        if (!collisions || !collisions.length) {
-                            break;
+                var $node = $(node),
+                    topicId = $node.data('topic'),
+                    topic = lookup(topicId),
+                    i = 0,
+                    next = (function () {
+                        var j = 0;
+                        return function () {
+                            j = j + (Math.random() * 50);
+                            return spiral(j);
                         }
+                    }()),
+                    point,
+                    rect;
 
-                        //TODO: better failsafe condition, maxDelta?
-                    } while (i++ < 500);
-                    quad.push(rect);
-                    //return "top: " + rect.x +"px; left:" + rect.y + "px;";
-                }
+                do {
+                    var xy = next(),
+                        x = xy[0] + center,
+                        y = xy[1] + center;
+
+                    point = {
+                        x: x,
+                        y: y
+                    };
+
+                    rect = {
+                        x: x - pad,
+                        y: y - pad,
+                        width: $node.width() + pad,
+                        height: $node.height() + pad
+                    };
+                    var collisions = quad.colliding(rect);
+                    console.log(collisions);
+                    if (!collisions.length) {
+                        break;
+                    }
+
+                    //TODO: better failsafe condition, maxDelta?
+                } while (i++ < 500);
+
+                quad.push(rect);
+                topic.s_left = rect.x;
+                topic.s_top = rect.y;
+                topics.push(topic);
+            });
+
+            ractive.set('topics', topics);
         });
 
-        function buildTopics() {
-            return (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
-                .map(_.compose(
-                    function (topic) {
-                        topic.seed = Math.floor(Math.random() * 5);
-                        topic.s_top = -1000;
-                        topic.s_left = -1000;
-                        return topic;
-                    },
-                    _.partial(proc.score, config.score))
-                );
-        }
-
         var lookup = function (id) {
-            var indexed = _.indexBy(json.topics, 'id');
+            var indexed = _.indexBy(topics, 'id');
             lookup = function (id) {
                 return indexed[id];
             };
@@ -180,6 +192,10 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 }
             });
         };
+
+        function spiral(t) {
+            return [(t *= .1) * Math.cos(t), t * Math.sin(t)];
+        }
 
         //var d3Cloud = function (spiralSize) {
         //    var center = spiralSize / 2;
@@ -254,9 +270,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
         //    //window.nodes = nodes;
         //};
         //
-        //function spiral(t) {
-        //    return [(t *= .1) * Math.cos(t), t * Math.sin(t)];
-        //}
+
         //
         //_.defer(_.partial(d3Cloud, 800));
 
