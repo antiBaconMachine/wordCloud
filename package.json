@@ -19,6 +19,7 @@
   "devDependencies": {
     "bower": "^1.6.9",
     "jasmine": "^2.3.2",
-    "jshint": "^2.8.0"
+    "jshint": "^2.8.0",
+    "requirejs": "^2.1.22"
   }
 }
