@@ -1,4 +1,9 @@
-<div class="col-md-9 col-xs-12 wordCloud">
-
-    <svg id="svgCloud" width="100%" height="400px" />
+<div class="col-md-9 col-xs-12">
+    <div class="spiral wordCloud">
+        {{#each shuffle(topics)}}
+        <li class="weight_{{weight}}" style="top: {{s_top}}px; left: {{s_left}}px">
+            <a class="sentiment_{{sentimentValue}} random_{{seed}}" href="#" on-click="selectTopic" data-topic="{{id}}">{{label}}</a>
+        </li>
+        {{/each}}
+    </div>
 </div>

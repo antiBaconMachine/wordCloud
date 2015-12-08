@@ -79,3 +79,13 @@ li {
 text {
   border: 1px solid black;
 }
+
+.spiral {
+  position: relative;
+  width: 800px;
+  height: 800px;
+}
+
+.spiral li {
+  position: absolute;
+}

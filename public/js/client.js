@@ -65,13 +65,64 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        ractive.on('')
+        ractive.on('render', function() {
+                var spiralSize = 800,
+                    center = spiralSize / 2,
+                    quad = new Quadtree({
+                        width: spiralSize,
+                        height: spiralSize
+                    }),
+                    pad = 2;
+
+                return function () {
+
+                    var i = 0,
+                        next = (function () {
+                            var j = 0;
+                            return function () {
+                                j = j + (Math.random() * 50);
+                                return spiral(j);
+                            }
+                        }()),
+                        point,
+                        rect;
+
+                    do {
+                        var xy = next(),
+                            x = xy[0] + center,
+                            y = xy[1] + center;
+
+                        point = {
+                            x: x,
+                            y: y
+                        };
+
+                        rect = {
+                            x: x - pad,
+                            y: y - pad,
+                            width: bbox.width + pad,
+                            height: bbox.height + pad + ((d.weight) * 5)
+                        };
+                        var collisions = quad.colliding(rect);
+                        console.log(collisions);
+                        if (!collisions || !collisions.length) {
+                            break;
+                        }
+
+                        //TODO: better failsafe condition, maxDelta?
+                    } while (i++ < 500);
+                    quad.push(rect);
+                    //return "top: " + rect.x +"px; left:" + rect.y + "px;";
+                }
+        });
 
         function buildTopics() {
             return (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
                 .map(_.compose(
                     function (topic) {
                         topic.seed = Math.floor(Math.random() * 5);
+                        topic.s_top = -1000;
+                        topic.s_left = -1000;
                         return topic;
                     },
                     _.partial(proc.score, config.score))
@@ -130,83 +181,83 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             });
         };
 
-        var d3Cloud = function (spiralSize) {
-            var center = spiralSize / 2;
-            window.spiral = spiral;
-
-            var quad = new Quadtree({
-                    width: spiralSize,
-                    height: spiralSize
-                }),
-                pad = 2;
-
-            var nodes = d3.select('#svgCloud')
-                .attr('width', spiralSize)
-                .attr('height', spiralSize)
-                .selectAll('text')
-                .data(_.shuffle(buildTopics()))
-                .enter().append('text')
-                .text(function (d) {
-                    return d.label;
-                })
-                .attr('font-size', function (d) {
-                    return (d.weight * 10) + 'px';
-                })
-                .style('dominant-baseline', 'central')
-                .attr("text-anchor", "middle");
-
-            nodes.each(function (d) {
-                var i = 0,
-                    bbox = this.getBBox(),
-                    next = (function () {
-                        var j = 0;
-                        return function () {
-                            j = j + 50;
-                            return spiral(j);
-                        }
-                    }()),
-                    pad = 2,
-                    point,
-                    rect;
-
-                do {
-                    var xy = next(),
-                        x = xy[0] + center,
-                        y = xy[1] + center;
-
-                    point = {
-                        x: x,
-                        y: y
-                    };
-
-                    rect = {
-                        x: x - pad,
-                        y: y - pad,
-                        width: bbox.width + pad,
-                        height: bbox.height + pad + ((d.weight) * 5)
-                    };
-                    var collisions = quad.colliding(rect);
-                    console.log(collisions);
-                    if (!collisions || !collisions.length) {
-                        break;
-                    }
-
-                    //TODO: better failsafe condition, maxDelta?
-                } while (i++ < 500);
-                d3.select(this).attr(_.extend(point, {
-                    class: " sentiment_" + d.sentimentValue
-                }));
-                quad.push(rect);
-            });
-
-
-            //window.nodes = nodes;
-        };
-
-        function spiral(t) {
-            return [(t *= .1) * Math.cos(t), t * Math.sin(t)];
-        }
-
-        _.defer(_.partial(d3Cloud, 800));
+        //var d3Cloud = function (spiralSize) {
+        //    var center = spiralSize / 2;
+        //    window.spiral = spiral;
+        //
+        //    var quad = new Quadtree({
+        //            width: spiralSize,
+        //            height: spiralSize
+        //        }),
+        //        pad = 2;
+        //
+        //    var nodes = d3.select('#svgCloud')
+        //        .attr('width', spiralSize)
+        //        .attr('height', spiralSize)
+        //        .selectAll('text')
+        //        .data(_.shuffle(buildTopics()))
+        //        .enter().append('text')
+        //        .text(function (d) {
+        //            return d.label;
+        //        })
+        //        .attr('font-size', function (d) {
+        //            return (d.weight * 10) + 'px';
+        //        })
+        //        .style('dominant-baseline', 'central')
+        //        .attr("text-anchor", "middle");
+        //
+        //    nodes.each(function (d) {
+        //        var i = 0,
+        //            bbox = this.getBBox(),
+        //            next = (function () {
+        //                var j = 0;
+        //                return function () {
+        //                    j = j + 50;
+        //                    return spiral(j);
+        //                }
+        //            }()),
+        //            pad = 2,
+        //            point,
+        //            rect;
+        //
+        //        do {
+        //            var xy = next(),
+        //                x = xy[0] + center,
+        //                y = xy[1] + center;
+        //
+        //            point = {
+        //                x: x,
+        //                y: y
+        //            };
+        //
+        //            rect = {
+        //                x: x - pad,
+        //                y: y - pad,
+        //                width: bbox.width + pad,
+        //                height: bbox.height + pad + ((d.weight) * 5)
+        //            };
+        //            var collisions = quad.colliding(rect);
+        //            console.log(collisions);
+        //            if (!collisions || !collisions.length) {
+        //                break;
+        //            }
+        //
+        //            //TODO: better failsafe condition, maxDelta?
+        //        } while (i++ < 500);
+        //        d3.select(this).attr(_.extend(point, {
+        //            class: " sentiment_" + d.sentimentValue
+        //        }));
+        //        quad.push(rect);
+        //    });
+        //
+        //
+        //    //window.nodes = nodes;
+        //};
+        //
+        //function spiral(t) {
+        //    return [(t *= .1) * Math.cos(t), t * Math.sin(t)];
+        //}
+        //
+        //_.defer(_.partial(d3Cloud, 800));
 
     });
