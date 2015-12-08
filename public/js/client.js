@@ -131,8 +131,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
         };
 
         var d3Cloud = function (spiralSize) {
-            var spiral = archimedeanSpiral([spiralSize, spiralSize]),
-                center = spiralSize / 2;
+            var center = spiralSize / 2;
             window.spiral = spiral;
 
             var quad = new Quadtree({
@@ -192,7 +191,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                         break;
                     }
 
-                    //TODO better failsafe condition, maxDelta?
+                    //TODO: better failsafe condition, maxDelta?
                 } while (i++ < 500);
                 d3.select(this).attr(_.extend(point, {
                     class: " sentiment_" + d.sentimentValue
@@ -204,11 +203,8 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             //window.nodes = nodes;
         };
 
-        function archimedeanSpiral(size) {
-            var e = size[0] / size[1];
-            return function (t) {
-                return [e * (t *= .1) * Math.cos(t), t * Math.sin(t)];
-            };
+        function spiral(t) {
+            return [(t *= .1) * Math.cos(t), t * Math.sin(t)];
         }
 
         _.defer(_.partial(d3Cloud, 800));
