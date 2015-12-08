@@ -14,7 +14,7 @@ Word cloud demo app.
 
 `npm test` - Runs jshint and jasmine tests
 
-`NODE_ENV=production npm start` - Start the server. Defaults to http://localhost:3000
+`NODE_ENV=production npm start` - Start the server. Defaults to [http://localhost:3000](http://localhost:3000)
 
 ## Back end
 
