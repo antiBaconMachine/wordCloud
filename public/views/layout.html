@@ -1,9 +1,34 @@
+<div class="row">
+    <h1 class="col-xs-12 col-md-9">Word Cloud</h1>
+</div>
 
 <div class="row">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#domCloud" aria-controls="domCloud" role="tab" data-toggle="tab">DOM</a></li>
-        <li role="presentation" class=""><a href="#spiralCloud" aria-controls="spiralCloud" role="tab" data-toggle="tab" on-click="renderSpiral">Spiral (Beta)</a></li>
+    <ul class="nav nav-tabs col-xs-9" role="tablist">
+        <li role="presentation" class="active"><a href="#domCloud" aria-controls="domCloud" role="tab"
+                                                  data-toggle="tab">DOM</a></li>
+        <li role="presentation" class=""><a href="#spiralCloud" aria-controls="spiralCloud" role="tab" data-toggle="tab"
+                                            on-click="renderSpiral">Spiral (Beta)</a></li>
     </ul>
+    <form id="settings" class="col-xs-3">
+        <!--<div class="row">-->
+        <!--<label for="weighSelect">-->
+        <!--Partition weights:-->
+        <!--</label>-->
+        <!--<select id="weighSelect" on-change="weightChanged">-->
+        <!--<option value="exp">Exponential</option>-->
+        <!--<option value="eql">~Equal</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <div class="row">
+            <label for="dodgeMode">
+                Dodge mode
+            </label>
+            <input type="checkbox" on-click="dodgeChanged" id="dodgeMode">
+        </div>
+    </form>
+</div>
+
+<div class="row">
 
     <!-- Tab panes -->
     <div class="tab-content">
