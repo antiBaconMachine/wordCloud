@@ -183,7 +183,7 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                         x: x - pad,
                         y: y - pad,
                         width: bbox.width + pad,
-                        height: bbox.height + pad
+                        height: bbox.height + pad + ((d.weight) * 5)
                     };
                     var collisions = quad.colliding(rect);
                     console.log(collisions);
