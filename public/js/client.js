@@ -65,6 +65,8 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
+        ractive.on('')
+
         function buildTopics() {
             return (CONST.weights[config.weight.default])(config.weight.divisions, json.topics.sort(proc.sort.hilo))
                 .map(_.compose(
@@ -127,5 +129,50 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 }
             });
         };
+
+        var d3Cloud = function(spiralSize) {
+            var spiral = archimedeanSpiral([spiralSize, spiralSize]),
+                next = (function(){
+                    var i = 0;
+                    return function() {
+                        i = i + 50;
+                        return spiral(i);
+                    }
+                }()),
+                center = spiralSize / 2;
+                window.spiral = spiral;
+
+
+            d3.select('#svgCloud')
+                .attr('width', spiralSize)
+                .attr('height', spiralSize)
+                .selectAll('text')
+                .data(_.shuffle(buildTopics()))
+                .enter().append('text')
+                .attr('class', function(d) {
+                    return "weight_" + d.weight + " sentiment_" + d.sentimentValue;
+                })
+                .text(function(d) {
+                    return d.label;
+                })
+                .attr('x', function(d) {
+                    var xy = next();
+                    d.cy = center + xy[1];
+                    return center + xy[0];
+                })
+                .attr('y', function(d) {
+                    return d.cy;
+                })
+                .attr('style', 'dominant-baseline: central;')
+        };
+
+        function archimedeanSpiral(size) {
+            var e = size[0] / size[1];
+            return function(t) {
+                return [e * (t *= .1) * Math.cos(t), t * Math.sin(t)];
+            };
+        }
+
+        d3Cloud(800);
 
     });

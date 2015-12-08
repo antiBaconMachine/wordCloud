@@ -52,12 +52,16 @@ li {
 
 .sentiment_negative {
   color: red;
+  fill: red;
+
 }
 .sentiment_neutral {
   color: gray;
+  fill: gray;
 }
 .sentiment_positive {
   color: green;
+  fill: green;
 }
 
 .vertical {
