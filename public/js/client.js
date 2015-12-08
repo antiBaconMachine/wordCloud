@@ -1,6 +1,6 @@
 define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash',
-        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'donut', 'tab', 'text!views/canvasCloud.html', 'spiral'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, donut, tab, tCanvasCloud, spiral) {
+        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'donut', 'tab', 'text!views/spiralCloud.html', 'spiral'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, donut, tab, tSprialCloud, spiral) {
         "use strict";
 
         var CONST = Object.freeze({
@@ -35,8 +35,8 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             template: tLayout,
             partials: {
                 domCloud: tDomCloud,
-                sideBar: tSideBar,
-                canvasCloud: tCanvasCloud
+                spiralCloud: tSprialCloud,
+                sideBar: tSideBar
             },
             data: {
                 topics: topics,
