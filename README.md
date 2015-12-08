@@ -6,7 +6,7 @@ Word cloud demo app.
 
 * *NIX environment
 * Node >= 4.2.1
-* Firefox 38 / Chrome 46
+* Firefox >= 38 / Chrome >= 46
 
 ## Usage
 
@@ -67,3 +67,5 @@ Obviously the app isn't perfect, there a a few things I haven't got around to:
 production I would minify, and possibly offload some deps to a CDN
 * More complete tests - The unit tests for more algorithmic parts of the app were a no brainer. Beyond that I didn't feel
 I had the scope for integration tests.
+* More complete responsive design - The app should nominally work on mobile devices. There is a little responsive magic, but
+it wasn't my foremost priority. Consequently the mobile experience is probably a bit rough around the edges.
