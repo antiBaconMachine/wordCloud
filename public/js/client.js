@@ -1,6 +1,6 @@
 define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json', 'topicProcessor', 'lodash',
-        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab', 'text!views/canvasCloud.html', 'quadtree'],
-    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud, quadtree) {
+        'config', 'text!views/layout.html', 'text!views/sideBar.html', 'd3', 'd3pie', 'tab', 'text!views/canvasCloud.html', 'spiral'],
+    function (Ractive, $, tDomCloud, json, proc, _, config, tLayout, tSideBar, d3, D3pie, tab, tCanvasCloud, spiral) {
         "use strict";
 
         var CONST = Object.freeze({
@@ -21,6 +21,14 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 },
                 _.partial(proc.score, config.score))
             );
+
+        var lookup = function (id) {
+            var indexed = _.indexBy(topics, 'id');
+            lookup = function (id) {
+                return indexed[id];
+            };
+            return lookup(id);
+        };
 
         Ractive.DEBUG = false;
         var ractive = new Ractive({
@@ -76,78 +84,9 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
             }
         });
 
-        ractive.on('complete', function () {
-
-            console.log("laying out spiral");
-
-            var spiralSize = 800,
-                center = spiralSize / 2,
-                quad = new Quadtree({
-                    width: spiralSize,
-                    height: spiralSize
-                }),
-                pad = 2,
-                topics = [];
-
-
-            $('.spiralNode').each(function (index, node) {
-                console.log(arguments);
-
-                var $node = $(node),
-                    topicId = $node.data('topic'),
-                    topic = lookup(topicId),
-                    i = 0,
-                    next = (function () {
-                        var j = 0;
-                        return function () {
-                            j = j + (Math.random() * 50);
-                            return spiral(j);
-                        }
-                    }()),
-                    point,
-                    rect;
-
-                do {
-                    var xy = next(),
-                        x = xy[0] + center,
-                        y = xy[1] + center;
-
-                    point = {
-                        x: x,
-                        y: y
-                    };
-
-                    rect = {
-                        x: x - pad,
-                        y: y - pad,
-                        width: $node.width() + pad,
-                        height: $node.height() + pad
-                    };
-                    var collisions = quad.colliding(rect);
-                    console.log(collisions);
-                    if (!collisions.length) {
-                        break;
-                    }
-
-                    //TODO: better failsafe condition, maxDelta?
-                } while (i++ < 500);
-
-                quad.push(rect);
-                topic.s_left = rect.x;
-                topic.s_top = rect.y;
-                topics.push(topic);
-            });
-
-            ractive.set('topics', topics);
+        ractive.on('renderSpiral', function() {
+            ractive.set('topics', spiral(lookup));
         });
-
-        var lookup = function (id) {
-            var indexed = _.indexBy(topics, 'id');
-            lookup = function (id) {
-                return indexed[id];
-            };
-            return lookup(id);
-        };
 
         var donut = function (topic) {
             $('#' + CONST.donutId).html('');
@@ -192,10 +131,6 @@ define(['Ractive', 'jquery', 'text!views/domCloud.html', 'json!res/topics.json',
                 }
             });
         };
-
-        function spiral(t) {
-            return [(t *= .1) * Math.cos(t), t * Math.sin(t)];
-        }
 
         //var d3Cloud = function (spiralSize) {
         //    var center = spiralSize / 2;

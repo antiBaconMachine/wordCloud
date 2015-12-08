@@ -1,15 +1,15 @@
 <div class="row">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class=""><a href="#domCloud" aria-controls="domCloud" role="tab" data-toggle="tab">DOM</a></li>
-        <li role="presentation" class="active"><a href="#canvasCloud" aria-controls="canvasCloud" role="tab" data-toggle="tab">Canvas (Beta)</a></li>
+        <li role="presentation" class="active"><a href="#domCloud" aria-controls="domCloud" role="tab" data-toggle="tab">DOM</a></li>
+        <li role="presentation" class=""><a href="#canvasCloud" aria-controls="canvasCloud" role="tab" data-toggle="tab" on-click="renderSpiral">Canvas (Beta)</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane" id="domCloud">
+        <div role="tabpanel" class="tab-pane active" id="domCloud">
             {{>domCloud}}
         </div>
-        <div role="tabpanel" class="tab-pane active" id="canvasCloud">
+        <div role="tabpanel" class="tab-pane" id="canvasCloud">
             {{>canvasCloud}}
         </div>
     </div>
